@@ -2,7 +2,7 @@ require('dotenv').config();
 
 //authentication strategy with a json webtoken
 //authenticate endpoints using a token
-const JwtStrategy = require('passport-jwt');
+const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const db = require('../models');
@@ -13,9 +13,9 @@ options.secretOrKey = process.env.JWT_SECRET;
 
 module.exports = (passport) => {
     passport.use(
-        //note: jwt_payload is an object that contains the decoded JWT payload
-        //note: done is a callback that takes an error as a first argument then information to pass up
         new JwtStrategy(options, (jwt_payload, done) => {
+            //note: jwt_payload is an object that contains the decoded JWT payload
+            //note: done is a callback that takes an error as a first argument then information to pass up
             //find user from id in payload, check if in db
             db.User.findById(jwt_payload.is)
                 .then((user) => {

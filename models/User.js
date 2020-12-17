@@ -9,12 +9,10 @@ const userSchema = new Schema({
         required: true,
         minLength: [8, 'Password must be at least 8 characters']
     },
-    //permissions: consumer, company (admin or rep) -- radio buttons or check boxes
-    //if first company account, automatically fill in admin, else default to rep
-    //only see admin/rep checkboxes if company is selected
-    permissions: { type: String, required: true },
-    //only show field once company bubble has been clicked so customer never sees or fills this out
-    company: { type: String, required: false }
+    dateCreated: {
+        type: Date,
+        default: new Date()
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);
