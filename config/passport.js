@@ -5,15 +5,31 @@ require('dotenv').config();
 const JwtStrategy = require('passport-jwt');
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
+const db = require('../models');
+
 const options = {};
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken;
 options.secretOrKey = process.env.JWT_SECRET;
 
 module.exports = (passport) => {
     passport.use(
+        //note: jwt_payload is an object that contains the decoded JWT payload
+        //note: done is a callback that takes an error as a first argument then information to pass up
         new JwtStrategy(options, (jwt_payload, done) => {
-            //find user from id in payload
-            //if user, check if in db
+            //find user from id in payload, check if in db
+            db.User.findById(jwt_payload.is)
+                .then((user) => {
+                    if (user) {
+                        //if user, return null for error and return user
+                        return done(null, user);
+                    } else {
+                        //no user found in database
+                        return done(null, false);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
     );
 };
