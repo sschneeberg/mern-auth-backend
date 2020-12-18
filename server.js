@@ -15,7 +15,7 @@ app.use(cors());
 
 //routes
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Connected to backend' });
+    res.status(200).json({ msg: 'Connected to backend' });
 });
 
 app.use('/api/users', require('./api/users'));
